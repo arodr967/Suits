@@ -14,14 +14,15 @@
 char getValue(int type){
     
     switch(type){
-        case 1:
-            return 'A'; /* Ace */
+
         case 11:
             return 'J'; /* Jack */
         case 12:
             return 'Q'; /* Queen */
         case 13:
             return 'K'; /* King */
+        case 14:
+            return 'A'; /* Ace */
     }
     return '~';
 }
@@ -37,7 +38,7 @@ struct deck createDeck(){
     /* Populate the Deck with 52 cards, 13 values per suit */
     
     for(i = 0; i < NUM_SUITS;i++){
-        for (j = 1; j <= MAX_CARDS_PER_HAND; j++) {
+        for (j = 2; j <= MAX_CARDS_PER_HAND + 1; j++) {
             
             /* compose array of values */
             newDeck.cards[index].value = j;
@@ -78,37 +79,27 @@ void printDeck(struct deck *newDeck){
 }
 
 /**************************************
-        Compute an arbitrary value.
- **************************************/
-int randValue(){
-    
-    /* compute a random value */
-    srand((unsigned)(clock() * DECK_SIZE + clock()));
-    
-    /* return the computed value */
-    return rand() % DECK_SIZE;
-}
-
-/**************************************
             Shuffles the deck.
  **************************************/
 void shuffle(struct deck *theDeck){
     
-    int rand, index;                /* intance var's */
+    int randon, index;                /* intance var's */
     
     /* swap the values with arbitrary value */
 
     for (index = 0; index < DECK_SIZE; index++){
-        rand = randValue();
+        
+        randon = rand() % DECK_SIZE;  
         struct card temp = theDeck->cards[index];
-        theDeck->cards[index] = theDeck->cards[rand];
-        theDeck->cards[rand] = temp;
+        theDeck->cards[index] = theDeck->cards[randon];
+        theDeck->cards[randon] = temp;
+        
     }
 }
 
 /**************************************
     This function deals the deck for
-    especific number of players.
+    specific number of players.
  **************************************/
 void deal( struct deck *deckptr, int pnum, int cnum){
 
@@ -171,7 +162,7 @@ void displayHands(struct card *players, int num1, int num2){
     }
 }
 /*************************************
-    Return the hands.
+            Return the hands.
  *************************************/
 struct players getHand(int cnum, struct deck *deckpointer, int *handpointer){
     
@@ -184,4 +175,73 @@ struct players getHand(int cnum, struct deck *deckpointer, int *handpointer){
         player.cardnum++;
     }
     return player;
+}
+/**************************************
+    Goes through each player's hands 
+    and sorts them in ascending order.
+ **************************************/
+    
+void sortHands( struct deck *deckptr, int pnum, int cnum){
+
+
+    /* variables used */
+    int cardNum, card = 0, currentCard = 0; 
+    
+    /* simulates hands specified by user */
+    struct card *players[cnum];
+
+    printf("\nSorting hands...\n\n");
+
+    for (cardNum = 0; cardNum < cnum ; cardNum++) {
+        
+        /* all cards go to single player */
+        if (pnum == DECK_SIZE-1) {
+            
+            for (; card < pnum; card++) {
+                players[card] = &deckptr->cards[currentCard];
+                currentCard++;
+            }
+        }else{
+            players[cardNum] = &deckptr->cards[currentCard];
+            currentCard++;
+        }
+        sort(*players, cnum, DECK_SIZE-1);
+    }  
+    displayHands(*players, cnum, pnum); /* print sorted hands */
+    printf("\n");
+
+}
+/**************************************
+     SelectionSort helper function.
+ **************************************/
+void sort(struct card *player, int numberOfCards, int decksize){
+
+    /* variables used */
+    int pass = 0, k, min, minIndex, next = decksize/numberOfCards;
+    struct card temp;
+    
+    /* traverse and sort each hand by defining and comparing min values */
+        for (; pass < numberOfCards; pass++)
+        {
+            if(pass == numberOfCards - 1 && numberOfCards < DECK_SIZE){
+                pass = numberOfCards;
+                numberOfCards += next;
+            }
+
+            min = player[pass].value;
+            minIndex = pass;
+            for (k = pass + 1; k < numberOfCards; k++)
+            {
+                if (player[k].value < min)
+                {
+                    min = player[k].value;
+                    minIndex = k;
+                }
+            }
+            /* swap cards after finding min, placing all in ascending order */
+            temp = player[pass];
+            player[pass] = player[minIndex];
+            player[minIndex] = temp;
+       }
+    return;
 }

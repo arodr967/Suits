@@ -22,10 +22,13 @@ int main(int argc, const char * argv[]) {
     
     /* local variables used here */
     
-    int max, numCardsPerHand, numOfPlayers, i, cardsPtr = 0, *ptr = &cardsPtr;
+    int max, numCardsPerHand, numOfPlayers, i, j, cardsPtr = 0, *ptr = &cardsPtr;
     struct deck thedeck, *pointer = &thedeck;
     thedeck = createDeck();
     struct players gamer [MAX_NUM_PLAYERS];
+    time_t t;
+    
+    srand((unsigned)time(&t));               // generate seed for random value
     
     /* validation of user input. No more than 3 args. */
     
@@ -54,14 +57,8 @@ int main(int argc, const char * argv[]) {
             printf("\nThe shuffled deck:\n\n");
             shuffle(pointer);
             printDeck(pointer);
-            
-            for (i = 0; i < numCardsPerHand; i++) {
-                gamer[i] =  getHand(numCardsPerHand, pointer, ptr);
-            }
-            
-            deal(pointer, numCardsPerHand, numOfPlayers);
-   
-            
+            deal(pointer, numCardsPerHand, numOfPlayers);   
+            sortHands(pointer, numCardsPerHand, numOfPlayers);
         }
     }else{
         /* here as specified, display error and terminate due to incorrect number of args entered by user */
