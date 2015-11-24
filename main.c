@@ -1,22 +1,22 @@
 /*
-  main.c
-  suit
-
+ main.c
+ suit
+ 
  This program simulates a card game with a deck of 52 cards and 4 suits.
- User input is accepted via the terminal with two arguments. Argument 1 
+ User input is accepted via the terminal with two arguments. Argument 1
  determines the number of cards to deal per hand/player and the Argument 2
  determines the number of players. Reasonable computation is performed so
- the values do not violate the deck size. For example max number of cards 
+ the values do not violate the deck size. For example max number of cards
  per 4 players is 13 since the product of the two is 52 (the size of the deck).
- But the product of 14 cards per hand/player and 4 players is not permitted. 
+ But the product of 14 cards per hand/player and 4 players is not permitted.
  In that case the program will terminate with an error message. Other attributes
  include shuffling and dealing the deck and displaying both deck and hands.
  
-  Created by Paola Jiron on 10/20/15.
-  Copyright © 2015 Paola Jiron. All rights reserved.
-
-*/
-#include "suit.h"
+ Created by Paola Jiron on 10/20/15.
+ Copyright © 2015 Paola Jiron. All rights reserved.
+ 
+ */
+#include "suit2.h"
 
 int main(int argc, const char * argv[]) {
     
@@ -34,9 +34,9 @@ int main(int argc, const char * argv[]) {
     
     if( argc == ARGNUM ){
         
-        /* parse the arguments to integer values 
-           and compute maximum legal values allowed
-           for game */
+        /* parse the arguments to integer values
+         and compute maximum legal values allowed
+         for game */
         
         numCardsPerHand = atoi(argv[CARD_INPUT]);
         numOfPlayers = atoi(argv[PLAYER_INPUT]);
@@ -44,12 +44,12 @@ int main(int argc, const char * argv[]) {
         
         if((max > DECK_SIZE) || (max == 0) || (numOfPlayers < PLAYER_MIN) ||
            (numOfPlayers > MAX_NUM_PLAYERS) || (numCardsPerHand < MIN_CARDS_PER_HAND) || numCardsPerHand > MAX_CARDS_PER_HAND){
- 
+            
             printf("Your values are not correct. Try again.\n");
             
         }else{
             /* create and display deck, shuffle the deck,
-                deal and display hands */
+             deal and display hands */
             
             thedeck = createDeck();
             printf("\nThe standard deck:\n\n");
@@ -57,7 +57,7 @@ int main(int argc, const char * argv[]) {
             printf("\nThe shuffled deck:\n\n");
             shuffle(pointer);
             printDeck(pointer);
-            deal(pointer, numCardsPerHand, numOfPlayers);   
+            deal(pointer, numCardsPerHand, numOfPlayers);
             sortHands(pointer, numCardsPerHand, numOfPlayers);
         }
     }else{

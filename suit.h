@@ -72,6 +72,7 @@ void deal( struct deck *thedeck, int numCardsPerHand, int numOfPlayers);
 void displayHands(struct card *players, int numOfPlayers, int numCardsPerHand);
 struct players getHand(int cnum, struct deck *deckpointer, int *handpointer);
 void sortHands( struct deck *deckptr, int pnum, int cnum);
-void sort(struct card *player, int numberOfCards, int decksize);
+void sort(struct card *player, int numberOfCards, int players, int passnum);
+
 
 #endif /* suit_h */
